@@ -16,8 +16,9 @@ app = FastAPI()
 @app.post("/generate-assessment")
 async def upload_lesson_generate_assessment(file: UploadFile):
     file_data = await file.read()
-    text = extract_text(file_data)
+    _validate_file_size(file_data)
 
+    text = extract_text(file_data)
     return StreamingResponse(get_assessment_response(lesson_text=text))
 
 
@@ -26,8 +27,10 @@ async def check_answer(
     file: UploadFile,
     question_with_choices: Annotated[str, Form()],
     correct_answer: Annotated[str, Form()],
-) -> str:
+):
     file_data = await file.read()
+    _validate_file_size(file_data)
+
     text = extract_text(file_data)
     return StreamingResponse(
         check_question_answer(
@@ -36,3 +39,9 @@ async def check_answer(
             correct_answer=correct_answer,
         )
     )
+
+
+def _validate_file_size(file_data: bytes):
+    # Limit file size to 1MB
+    if len(file_data) > 1_000_000:
+        raise ValueError("File size exceeds 1MB")

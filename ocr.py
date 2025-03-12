@@ -1,19 +1,16 @@
-import os
 from pdf2image import convert_from_bytes
 import pytesseract
-import cv2
 
 
 def extract_text(data: bytes) -> str:
     try:
         print("Starting OCR")
         ocr_data = ""
-        images = convert_from_bytes(data, dpi=500)
+        images = convert_from_bytes(
+            data, dpi=500, fmt="jpeg", thread_count=4, grayscale=True
+        )
         for i, image in enumerate(images):
-            fname = "image" + str(i) + ".jpeg"
-            image.save(fname, format="jpeg")
-            text = pytesseract.image_to_string(cv2.imread(fname))
-            os.remove(fname)
+            text = pytesseract.image_to_string(image)
             ocr_data = ocr_data + "\n\n" + text
         print("OCR completed")
         return ocr_data

@@ -4,3 +4,7 @@ pytesseract==0.3.13
 python-dotenv==1.0.1
 langchain==0.3.20
 langchain-openai==0.3.8
+torch==2.6.0
+torchvision==0.21.0
+pix2tex[cli]==0.1.4
+munch==4.0.0

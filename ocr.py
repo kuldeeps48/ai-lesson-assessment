@@ -26,9 +26,14 @@ def extract_text(data: bytes) -> str:
             if not image:
                 continue
             text = pytesseract.image_to_string(image, lang="eng+hin+deva")
-            # maths = pix3texModel(image)
-            # if maths and len(maths) > 0:
-            #     text += "\n\nMaths expressions:" + maths
+            maths = None  # Initialize maths to None
+            try:
+                maths = pix3texModel(image)
+            except Exception as e:
+                print(f"Error during math extraction with pix2tex: {e}")
+            
+            if maths and len(maths) > 0:
+                text += "\n\nMaths expressions:" + maths
 
             ocr_data = ocr_data + "\n\n" + text
         print("OCR completed")

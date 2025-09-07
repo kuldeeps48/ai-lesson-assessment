@@ -8,3 +8,5 @@ torch==2.6.0
 torchvision==0.21.0
 pix2tex[cli]==0.1.4
 munch==4.0.0
+pydantic-settings>=2.0.0
+pytest==8.3.5
